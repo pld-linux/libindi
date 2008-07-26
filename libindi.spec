@@ -41,9 +41,7 @@ Static indilib library.
 
 %build
 %configure
-%{__make} \
-	   CFLAGS="%{rpmcflags}" \
-	   LDFLAGS="%{rpmldflags}"
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -67,7 +65,7 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %{_libdir}/libsbigudrv.la
-%{_libdir}/libsbigudrv.so
+%attr(755,root,root) %{_libdir}/libsbigudrv.so
 
 %files static
 %defattr(644,root,root,755)
