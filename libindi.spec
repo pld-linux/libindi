@@ -7,6 +7,7 @@ Group:		Libraries
 URL:		http://indi.sourceforge.net/
 Source0:	http://dl.sourceforge.net/indi/%{name}-%{version}.tar.gz
 # Source0-md5:	1b370b2aad7c6aa79faccbec20b30278
+Patch0:		%{name}-gcc-4.3.patch
 BuildRequires:	cfitsio-devel
 BuildRequires:	libnova-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -38,6 +39,7 @@ Static indilib library.
 
 %prep
 %setup -q -n indi
+%patch0 -p1
 
 %build
 %configure
