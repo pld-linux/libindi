@@ -1,0 +1,12 @@
+diff -ur indi/src/sbigcam.cpp indi.new/src/sbigcam.cpp
+--- indi/src/sbigcam.cpp	2007-04-15 21:11:18.000000000 +0200
++++ indi.new/src/sbigcam.cpp	2008-07-27 14:02:12.806961397 +0200
+@@ -26,6 +26,7 @@
+ 	
+ #endif
+ //==========================================================================
++#include <string.h>
+ #include "sbigcam.h"
+ using namespace std;
+ //==========================================================================
+Tylko w indi.new/src: sbigcam.cpp~
