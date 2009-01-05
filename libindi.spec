@@ -1,7 +1,7 @@
 Summary:	Instrument Neutral Distributed Interface
 Name:		indilib
 Version:	0.5
-Release:	1
+Release:	3
 License:	LGPL
 Group:		Libraries
 URL:		http://indi.sourceforge.net/
