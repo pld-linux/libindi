@@ -13,6 +13,7 @@ BuildRequires:	libnova-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libusb-compat-devel
 BuildRequires:	zlib-devel
+Obsoletes:	indilib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -28,6 +29,7 @@ so you can get more science with less time.
 Summary:	Header files and static libraries from indilib
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	indilib-devel
 
 %description devel
 Libraries and includes files for developing programs based on indilib.
@@ -36,6 +38,7 @@ Libraries and includes files for developing programs based on indilib.
 Summary:	Static indilib library
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
+Obsoletes:	indilib-static
 
 %description static
 Static indilib library.
