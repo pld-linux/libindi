@@ -1,7 +1,7 @@
 Summary:	Instrument Neutral Distributed Interface
 Name:		libindi
 Version:	0.6
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Libraries
 URL:		http://indi.sourceforge.net/
@@ -49,7 +49,7 @@ cd build
 %cmake \
 	-DCMAKE_INSTALL_PREFIX=%{_prefix} \
 %if "%{_lib}" == "lib64"
-	-DLIB_SUFFIX=64 \
+	-DLIB_POSTFIX=64 \
 %endif
 	../
 %{__make}
