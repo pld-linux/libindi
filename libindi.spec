@@ -1,7 +1,7 @@
 Summary:	Instrument Neutral Distributed Interface
 Name:		libindi
 Version:	0.6
-Release:	2
+Release:	3
 License:	LGPL
 Group:		Libraries
 URL:		http://indi.sourceforge.net/
