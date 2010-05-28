@@ -4,9 +4,9 @@ Version:	0.6
 Release:	3
 License:	LGPL
 Group:		Libraries
-URL:		http://indi.sourceforge.net/
 Source0:	http://dl.sourceforge.net/indi/%{name}0_%{version}.tar.gz
 # Source0-md5:	49218ad15a40dfa8a2366a2694477595
+URL:		http://indi.sourceforge.net/
 BuildRequires:	cfitsio-devel
 BuildRequires:	cmake
 BuildRequires:	libnova-devel
