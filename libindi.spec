@@ -1,14 +1,17 @@
+
+%define		realver	61
+
 Summary:	Instrument Neutral Distributed Interface
 Name:		libindi
-Version:	0.6
-Release:	3
+Version:	0.6.1
+Release:	1
 License:	LGPL
 Group:		Libraries
-Source0:	http://dl.sourceforge.net/indi/%{name}0_%{version}.tar.gz
-# Source0-md5:	49218ad15a40dfa8a2366a2694477595
+Source0:	http://dl.sourceforge.net/indi/%{name}0_%{realver}.tar.gz
+# Source0-md5:	005e6ae3bc6fc1eeb5aa7700a65e2584
 URL:		http://indi.sourceforge.net/
 BuildRequires:	cfitsio-devel
-BuildRequires:	cmake
+BuildRequires:	cmake >= 2.8.0
 BuildRequires:	libnova-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libusb-compat-devel
@@ -44,7 +47,7 @@ Obsoletes:	indilib-static
 Static indilib library.
 
 %prep
-%setup -q -n %{name}0-%{version}
+%setup -q -n %{name}
 
 %build
 install -d build
@@ -97,6 +100,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_includedir}/libindi
 %{_libdir}/libindi.so
+%{_pkgconfigdir}/libindi.pc
 
 %files static
 %defattr(644,root,root,755)
