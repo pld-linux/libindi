@@ -14,7 +14,7 @@ BuildRequires:	cfitsio-devel
 BuildRequires:	cmake >= 2.8.0
 BuildRequires:	libnova-devel
 BuildRequires:	libstdc++-devel
-BuildRequires:	libusb-compat-devel
+BuildRequires:	pkgconfig
 BuildRequires:	zlib-devel
 Obsoletes:	indilib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -56,6 +56,7 @@ cd build
 	-DCMAKE_INSTALL_PREFIX=%{_prefix} \
 %if "%{_lib}" == "lib64"
 	-DLIB_POSTFIX=64 \
+	-DLIB_SUFFIX=64 \
 %endif
 	../
 %{__make}
