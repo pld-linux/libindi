@@ -1,0 +1,11 @@
+--- libindi-0.7.2/CMakeLists.txt~	2010-11-20 12:38:03.000000000 +0100
++++ libindi-0.7.2/CMakeLists.txt	2011-02-28 22:18:20.891089842 +0100
+@@ -661,7 +661,7 @@
+ 
+ add_executable(tutorial_client ${tutorialclient_SRCS} ${liblilxml_SRCS} ${libindicom_SRCS})
+ 
+-target_link_libraries(tutorial_client indiclient m)
++target_link_libraries(tutorial_client indiclient m pthread)
+ 
+ if (NOVA_FOUND)
+   target_link_libraries(tutorial_client ${NOVA_LIBRARIES})
