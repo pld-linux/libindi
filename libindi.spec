@@ -1,7 +1,7 @@
 Summary:	Instrument Neutral Distributed Interface
 Name:		libindi
 Version:	0.7.2
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Libraries
 Source0:	http://dl.sourceforge.net/indi/0.7/%{name}_%{version}.tar.gz
@@ -46,6 +46,7 @@ Static indilib library.
 
 %prep
 %setup -q
+%undos CMakeLists.txt
 %patch0 -p1
 
 %build
