@@ -2,7 +2,7 @@ Summary:	Instrument Neutral Distributed Interface
 Summary(pl.UTF-8):	Instrument Neutral Distributed Interface - interfejs do sterowania przyrządami
 Name:		libindi
 Version:	0.8
-Release:	1
+Release:	2
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/indi/%{name}_%{version}.tar.gz
@@ -76,7 +76,11 @@ Statyczna biblioteka INDI.
 %build
 install -d build
 cd build
-%cmake ..
+%cmake \
+%if "%{_lib}" == "lib64"
+	-DLIB_POSTFIX=64 \
+%endif
+	..
 
 %{__make}
 
