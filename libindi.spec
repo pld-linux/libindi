@@ -1,12 +1,12 @@
 Summary:	Instrument Neutral Distributed Interface
 Summary(pl.UTF-8):	Instrument Neutral Distributed Interface - interfejs do sterowania przyrządami
 Name:		libindi
-Version:	0.8
-Release:	3
+Version:	0.9.7
+Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/indi/%{name}_%{version}.tar.gz
-# Source0-md5:	ca2b7c56431eb5e08218929e5eb72150
+# Source0-md5:	3e457c4226d7a445a0d89c044cced6b7
 Patch0:		%{name}-build.patch
 URL:		http://www.indilib.org/
 BuildRequires:	cfitsio-devel >= 3.03
@@ -23,6 +23,9 @@ Requires:	cfitsio >= 3.03
 Requires:	libnova >= 0.12.2
 Obsoletes:	indilib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# these libs rely on symbols in drivers/binaries
+%define		skip_post_check_so	libindidriver.so.* libindimain.so.*
 
 %description
 INDI is a distributed control protocol designed to operate
@@ -43,34 +46,21 @@ INDO zapewnia całkowicie przezroczyste sterowanie przyrządami,
 pozostawiając więcej czasu na cele naukowe.
 
 %package devel
-Summary:	Header files for INDI library
-Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki INDI
+Summary:	Header files for INDI libraries
+Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek INDI
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	indilib-devel
+Obsoletes:	libindi-static
 
 %description devel
-Header files for INDI library.
+Header files for INDI libraries.
 
 %description devel -l pl.UTF-8
-Pliki nagłówkowe biblioteki INDI.
-
-%package static
-Summary:	Static INDI library
-Summary(pl.UTF-8):	Statyczna biblioteka INDI
-Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
-Obsoletes:	indilib-static
-
-%description static
-Static INDI library.
-
-%description static -l pl.UTF-8
-Statyczna biblioteka INDI.
+Pliki nagłówkowe bibliotek INDI.
 
 %prep
 %setup -q
-%undos CMakeLists.txt
 %patch0 -p1
 
 %build
@@ -101,20 +91,33 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_celestron_gps
 %attr(755,root,root) %{_bindir}/indi_eval
 %attr(755,root,root) %{_bindir}/indi_getprop
+%attr(755,root,root) %{_bindir}/indi_gpusb
+%attr(755,root,root) %{_bindir}/indi_ieq45_8406
+%attr(755,root,root) %{_bindir}/indi_ieq45_8407
 %attr(755,root,root) %{_bindir}/indi_intelliscope
+%attr(755,root,root) %{_bindir}/indi_joystick
+%attr(755,root,root) %{_bindir}/indi_lx200_16
+%attr(755,root,root) %{_bindir}/indi_lx200ap
+%attr(755,root,root) %{_bindir}/indi_lx200autostar
 %attr(755,root,root) %{_bindir}/indi_lx200basic
+%attr(755,root,root) %{_bindir}/indi_lx200classic
+%attr(755,root,root) %{_bindir}/indi_lx200fs2
 %attr(755,root,root) %{_bindir}/indi_lx200generic
+%attr(755,root,root) %{_bindir}/indi_lx200genericlegacy
+%attr(755,root,root) %{_bindir}/indi_lx200gps
+%attr(755,root,root) %{_bindir}/indi_magellan1
 %attr(755,root,root) %{_bindir}/indi_meade_lpi
-%attr(755,root,root) %{_bindir}/indi_orion_atlas
 %attr(755,root,root) %{_bindir}/indi_robo_focus
 %attr(755,root,root) %{_bindir}/indi_sbig_stv
 %attr(755,root,root) %{_bindir}/indi_setprop
 %attr(755,root,root) %{_bindir}/indi_simulator_ccd
+%attr(755,root,root) %{_bindir}/indi_simulator_focus
 %attr(755,root,root) %{_bindir}/indi_simulator_telescope
 %attr(755,root,root) %{_bindir}/indi_simulator_wheel
 %attr(755,root,root) %{_bindir}/indi_skycommander
 %attr(755,root,root) %{_bindir}/indi_synscan
 %attr(755,root,root) %{_bindir}/indi_tcfs_focus
+%attr(755,root,root) %{_bindir}/indi_tcfs3_focus
 %attr(755,root,root) %{_bindir}/indi_temma
 %attr(755,root,root) %{_bindir}/indi_trutech_wheel
 %attr(755,root,root) %{_bindir}/indi_v4l_generic
@@ -122,18 +125,20 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indiserver
 %attr(755,root,root) %{_libdir}/libindi.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libindi.so.0
+%attr(755,root,root) %{_libdir}/libindidriver.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libindidriver.so.0
+%attr(755,root,root) %{_libdir}/libindimain.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libindimain.so.0
 %dir %{_datadir}/indi
 %{_datadir}/indi/drivers.xml
 %{_datadir}/indi/indi_tcfs_sk.xml
+/lib/udev/rules.d/99-gpusb.rules
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libindi.so
+%attr(755,root,root) %{_libdir}/libindidriver.so
+%attr(755,root,root) %{_libdir}/libindimain.so
+%{_libdir}/libindiclient.a
 %{_includedir}/libindi
 %{_pkgconfigdir}/libindi.pc
-
-%files static
-%defattr(644,root,root,755)
-%{_libdir}/libindiclient.a
-%{_libdir}/libindidriver.a
-%{_libdir}/libindimain.a
