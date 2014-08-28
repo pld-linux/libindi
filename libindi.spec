@@ -11,10 +11,12 @@ Patch0:		no_static_lib.patch
 URL:		http://www.indilib.org/
 BuildRequires:	cfitsio-devel >= 3.03
 BuildRequires:	cmake >= 2.8.0
+BuildRequires:	gsl-devel
 # not actually used now
 #BuildRequires:	libfli-devel >= 1.7
+BuildRequires:	libjpeg-devel
 BuildRequires:	libnova-devel >= 0.12.2
-BuildRequires:	libusb-compat-devel
+BuildRequires:	libusb-devel >= 1
 BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.603
@@ -51,7 +53,6 @@ Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek INDI
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	indilib-devel
-Obsoletes:	libindi-static
 
 %description devel
 Header files for INDI libraries.
@@ -59,19 +60,27 @@ Header files for INDI libraries.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe bibliotek INDI.
 
+%package static
+Summary:	Static INDI libraries
+Summary(pl.UTF-8):	Statyczne biblioteki INDI
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static INDI libraries.
+
+%description static -l pl.UTF-8
+Statyczne biblioteki INDI.
+
 %prep
 %setup -q -n libindi-0.9.8
 %patch0 -p1
-#%patch0 -p1
 
 %build
 install -d build
 cd build
-%cmake \
-%if "%{_lib}" == "lib64"
-	-DLIB_POSTFIX=64 \
-%endif
-	..
+%cmake .. \
+	-DINDI_MATH_PLUGINS_DIRECTORY:PATH=%{_libdir}/indi/MathPlugins
 
 %{__make}
 
@@ -135,9 +144,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libindidriver.so.0
 %attr(755,root,root) %{_libdir}/libindimain.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libindimain.so.0
-%attr(755,root,root) %ghost %{_libdir}/libindiAlignmentDriver.so.0
+%attr(755,root,root) %{_libdir}/libindiAlignmentClient.so
 %attr(755,root,root) %{_libdir}/libindiAlignmentDriver.so.*.*.*
-
+%attr(755,root,root) %ghost %{_libdir}/libindiAlignmentDriver.so.0
+%dir %{_libdir}/indi
+%dir %{_libdir}/indi/MathPlugins
+%attr(755,root,root) %{_libdir}/indi/MathPlugins/libindi_SVD_MathPlugin.so
 %dir %{_datadir}/indi
 %{_datadir}/indi/drivers.xml
 %{_datadir}/indi/indi_tcfs_sk.xml
@@ -149,7 +161,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libindidriver.so
 %attr(755,root,root) %{_libdir}/libindimain.so
 %attr(755,root,root) %{_libdir}/libindiAlignmentDriver.so
-
 %{_libdir}/libindiclient.a
 %{_includedir}/libindi
 %{_pkgconfigdir}/libindi.pc
+
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libindidriver.a
