@@ -1,0 +1,50 @@
+From 2363105d83087e83adf86846d192e5e17cd61b19 Mon Sep 17 00:00:00 2001
+From: Jasem Mutlaq <mutlaqja@ikarustech.com>
+Date: Sun, 19 Mar 2017 11:10:37 +0300
+Subject: [PATCH] Update libindi.pc to include updated libs in 1.4.1
+
+---
+ libindi/CMakeLists.txt   | 3 +++
+ libindi/libindi.pc.cmake | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/libindi/CMakeLists.txt b/libindi/CMakeLists.txt
+index 46247a7b..18ea148d 100644
+--- a/libindi/CMakeLists.txt
++++ b/libindi/CMakeLists.txt
+@@ -48,6 +48,8 @@ set(INCLUDE_INSTALL_DIR      "${CMAKE_INSTALL_PREFIX}/include/")
+ set(PKGCONFIG_INSTALL_PREFIX "${CMAKE_INSTALL_LIBDIR}/pkgconfig/")
+ set(UDEVRULES_INSTALL_DIR "/lib/udev/rules.d" CACHE STRING "Base directory for udev rules")
+ 
++set(PKG_CONFIG_LIBDIR ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
++
+ #####################################  Build Options  ##############################################
+ # Select which components to build and what options to apply
+ 
+@@ -318,6 +320,7 @@ set_target_properties(indidriver PROPERTIES COMPILE_FLAGS "-fPIC")
+ set_target_properties(indidriver PROPERTIES VERSION ${CMAKE_INDI_VERSION_STRING} SOVERSION ${INDI_SOVERSION} OUTPUT_NAME indidriver)
+ target_link_libraries(indidriver ${LIBUSB_1_LIBRARIES} ${NOVA_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${CFITSIO_LIBRARIES} ${M_LIB} ${ZLIB_LIBRARY} ${JPEG_LIBRARY})
+ install(TARGETS indidriver LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
++set(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} -lindidriver -lindiAlignmentDriver")
+ endif(CYGWIN)
+ 
+ 
+diff --git a/libindi/libindi.pc.cmake b/libindi/libindi.pc.cmake
+index 39b8cdb7..8deb8420 100644
+--- a/libindi/libindi.pc.cmake
++++ b/libindi/libindi.pc.cmake
+@@ -1,12 +1,12 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=@LIB_DESTINATION@
++libdir=@PKG_CONFIG_LIBDIR@
+ includedir=@INCLUDE_INSTALL_DIR@
+ 
+ Name: libindi
+ Description: Instrument Neutral Distributed Interface
+ URL: http://www.indilib.org/
+ Version: @CMAKE_INDI_VERSION_STRING@
+-Libs: -L${libdir} -lindi
++Libs: -L${libdir} @PKG_CONFIG_LIBS@
+ Cflags: -I${includedir} -I${includedir}/libindi
+ 

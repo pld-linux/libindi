@@ -1,11 +1,11 @@
---- libindi-0.9.8/libs/indibase/alignment/CMakeLists.txt.orig	2014-08-25 12:37:15.100484050 +0200
-+++ libindi-0.9.8/libs/indibase/alignment/CMakeLists.txt	2014-08-25 12:37:36.873688353 +0200
-@@ -62,7 +62,7 @@ set (AlignmentClient_SRCS
- 
- add_library(AlignmentClient ${AlignmentClient_SRCS})
+--- libindi/libs/indibase/alignment/CMakeLists.txt.orig	2017-06-29 05:55:25.448075443 +0200
++++ libindi/libs/indibase/alignment/CMakeLists.txt	2017-06-29 15:33:03.307679715 +0200
+@@ -80,7 +80,7 @@
+ SET_TARGET_PROPERTIES(AlignmentClient PROPERTIES COMPILE_FLAGS "-fPIC")
+ endif(NOT CYGWIN AND NOT WIN32)
  set_target_properties(AlignmentClient PROPERTIES OUTPUT_NAME indiAlignmentClient)
--install(TARGETS AlignmentClient ARCHIVE DESTINATION ${LIB_DESTINATION})
-+install(TARGETS AlignmentClient DESTINATION ${LIB_DESTINATION})
+-install(TARGETS AlignmentClient ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
++install(TARGETS AlignmentClient DESTINATION ${CMAKE_INSTALL_LIBDIR})
  
  ##################################################
  ############ LoaderCLient test program ###########

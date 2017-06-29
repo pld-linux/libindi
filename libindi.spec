@@ -1,16 +1,22 @@
+#
+# Conditional build:
+%bcond_without	qt5	# Qt5 client library
+#
 Summary:	Instrument Neutral Distributed Interface
 Summary(pl.UTF-8):	Instrument Neutral Distributed Interface - interfejs do sterowania przyrządami
 Name:		libindi
-Version:	1.2.0
-Release:	2
+Version:	1.4.1
+Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/indi/%{name}_%{version}.tar.gz
-# Source0-md5:	21eae8f5ccfef8a28cc0c3a763a1f4fb
+# Source0-md5:	9f7556239dda08b7175ec44bd5a61b71
 Patch0:		no_static_lib.patch
+Patch1:		%{name}-pc.patch
 URL:		http://www.indilib.org/
+%{?with_qt5:BuildRequires:	Qt5Network-devel >= 5.0}
 BuildRequires:	cfitsio-devel >= 3.03
-BuildRequires:	cmake >= 2.8.0
+BuildRequires:	cmake >= 3.0
 BuildRequires:	curl-devel
 BuildRequires:	gsl-devel >= 1.10
 # not actually used now
@@ -20,6 +26,7 @@ BuildRequires:	libnova-devel >= 0.12.2
 BuildRequires:	libusb-devel >= 1
 BuildRequires:	libstdc++-devel >= 6:4.3
 BuildRequires:	pkgconfig
+%{?with_qt5:BuildRequires:	qt5-build >= 5.0}
 BuildRequires:	rpmbuild(macros) >= 1.603
 BuildRequires:	zlib-devel
 Requires:	cfitsio >= 3.03
@@ -74,20 +81,38 @@ Static INDI libraries.
 %description static -l pl.UTF-8
 Statyczne biblioteki INDI.
 
+%package qt5-devel
+Summary:	INDI Qt5 client library
+Summary(pl.UTF-8):	Biblioteka kliencka INDI oparta o Qt5
+Group:		Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+Requires:	Qt5Network-devel >= 5
+
+%description qt5-devel
+INDI Qt5 client library.
+
+%description qt5-devel -l pl.UTF-8
+Biblioteka kliencka INDI oparta o Qt5.
+
 %prep
-%setup -q -n %{name}_%{version}
+%setup -q -n %{name}
 %patch0 -p1
+%patch1 -p2
 
 %build
 install -d build
 cd build
+# note: CMakeLists expect relative CMAKE_INSTALL_LIBDIR
 %cmake .. \
+	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
+	%{?with_qt5:-DINDI_BUILD_QT5_CLIENT=ON} \
 	-DINDI_MATH_PLUGINS_DIRECTORY:PATH=%{_libdir}/indi/MathPlugins
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
@@ -106,11 +131,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_flipflat
 %attr(755,root,root) %{_bindir}/indi_getprop
 %attr(755,root,root) %{_bindir}/indi_gpusb
+%attr(755,root,root) %{_bindir}/indi_hitecastrodc_focus
 %attr(755,root,root) %{_bindir}/indi_ieq_telescope
 %attr(755,root,root) %{_bindir}/indi_imager_agent
-%attr(755,root,root) %{_bindir}/indi_intelliscope
 %attr(755,root,root) %{_bindir}/indi_joystick
+%attr(755,root,root) %{_bindir}/indi_lx200_10micron
 %attr(755,root,root) %{_bindir}/indi_lx200_16
+%attr(755,root,root) %{_bindir}/indi_lx200_OnStep
 %attr(755,root,root) %{_bindir}/indi_lx200ap
 %attr(755,root,root) %{_bindir}/indi_lx200autostar
 %attr(755,root,root) %{_bindir}/indi_lx200basic
@@ -123,14 +150,18 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_lx200ss2000pc
 %attr(755,root,root) %{_bindir}/indi_lx200zeq25
 %attr(755,root,root) %{_bindir}/indi_lynx_focus
-%attr(755,root,root) %{_bindir}/indi_magellan1
 %attr(755,root,root) %{_bindir}/indi_meta_weather
+%attr(755,root,root) %{_bindir}/indi_microtouch_focus
 %attr(755,root,root) %{_bindir}/indi_moonlite_focus
 %attr(755,root,root) %{_bindir}/indi_nfocus
+%attr(755,root,root) %{_bindir}/indi_nstep_focus
+%attr(755,root,root) %{_bindir}/indi_optec_wheel
 %attr(755,root,root) %{_bindir}/indi_perfectstar_focus
+%attr(755,root,root) %{_bindir}/indi_quantum_wheel
 %attr(755,root,root) %{_bindir}/indi_robo_focus
 %attr(755,root,root) %{_bindir}/indi_rolloff_dome
-%attr(755,root,root) %{_bindir}/indi_sbig_stv
+%attr(755,root,root) %{_bindir}/indi_script_dome
+%attr(755,root,root) %{_bindir}/indi_script_telescope
 %attr(755,root,root) %{_bindir}/indi_setprop
 %attr(755,root,root) %{_bindir}/indi_simulator_ccd
 %attr(755,root,root) %{_bindir}/indi_simulator_dome
@@ -138,24 +169,22 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_simulator_gps
 %attr(755,root,root) %{_bindir}/indi_simulator_telescope
 %attr(755,root,root) %{_bindir}/indi_simulator_wheel
-%attr(755,root,root) %{_bindir}/indi_skycommander
 %attr(755,root,root) %{_bindir}/indi_skywatcherAPIMount
 %attr(755,root,root) %{_bindir}/indi_smartfocus_focus
+%attr(755,root,root) %{_bindir}/indi_sqm_weather
 %attr(755,root,root) %{_bindir}/indi_star2000
 %attr(755,root,root) %{_bindir}/indi_steeldrive_focus
 %attr(755,root,root) %{_bindir}/indi_synscan
-%attr(755,root,root) %{_bindir}/indi_tcfs_focus
 %attr(755,root,root) %{_bindir}/indi_tcfs3_focus
+%attr(755,root,root) %{_bindir}/indi_tcfs_focus
 %attr(755,root,root) %{_bindir}/indi_temma
-%attr(755,root,root) %{_bindir}/indi_trutech_wheel
+%attr(755,root,root) %{_bindir}/indi_usbfocusv3_focus
 %attr(755,root,root) %{_bindir}/indi_v4l2_ccd
 %attr(755,root,root) %{_bindir}/indi_vantage_weather
 %attr(755,root,root) %{_bindir}/indi_watchdog
 %attr(755,root,root) %{_bindir}/indi_wunderground_weather
 %attr(755,root,root) %{_bindir}/indi_xagyl_wheel
 %attr(755,root,root) %{_bindir}/indiserver
-%attr(755,root,root) %{_libdir}/libindi.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libindi.so.1
 %attr(755,root,root) %{_libdir}/libindidriver.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libindidriver.so.1
 %attr(755,root,root) %{_libdir}/libindiAlignmentDriver.so.*.*.*
@@ -168,19 +197,27 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/indi/indi_tcfs_sk.xml
 /lib/udev/rules.d/99-flipflat.rules
 /lib/udev/rules.d/99-gpusb.rules
+/lib/udev/rules.d/99-hitecastrodcfocuser.rules
 /lib/udev/rules.d/99-perfectstar.rules
 /lib/udev/rules.d/99-vantage.rules
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libindi.so
 %attr(755,root,root) %{_libdir}/libindidriver.so
 %attr(755,root,root) %{_libdir}/libindiAlignmentDriver.so
 %{_libdir}/libindiAlignmentClient.a
 %{_libdir}/libindiclient.a
 %{_includedir}/libindi
+%{?with_qt5:%exclude %{_includedir}/libindi/baseclientqt.h}
 %{_pkgconfigdir}/libindi.pc
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libindidriver.a
+
+%if %{with qt5}
+%files qt5-devel
+%defattr(644,root,root,755)
+%{_libdir}/libindiclientqt.a
+%{_includedir}/libindi/baseclientqt.h
+%endif
