@@ -23,6 +23,7 @@ BuildRequires:	gsl-devel >= 1.10
 #BuildRequires:	libfli-devel >= 1.7
 BuildRequires:	libjpeg-devel
 BuildRequires:	libnova-devel >= 0.12.2
+BuildRequires:	librtlsdr-devel
 BuildRequires:	libstdc++-devel >= 6:4.3
 BuildRequires:	libtheora-devel
 BuildRequires:	libusb-devel >= 1
