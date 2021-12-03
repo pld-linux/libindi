@@ -1,0 +1,21 @@
+--- indi-1.9.3/libs/indibase/alignment/CMakeLists.txt~	2021-12-03 22:14:34.000000000 +0100
++++ indi-1.9.3/libs/indibase/alignment/CMakeLists.txt	2021-12-03 22:21:23.609154205 +0100
+@@ -43,7 +43,7 @@
+     ELSE ()
+         # Force linking all referenced libraries because of libgsl is not linked against cblas library on Linux
+         SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-as-needed")
+-        target_link_libraries(AlignmentDriver dl ${GSL_LIBRARIES})
++        target_link_libraries(AlignmentDriver indidriver dl ${GSL_LIBRARIES})
+     ENDIF ()
+ ENDIF ()
+ 
+--- indi-1.9.3/CMakeLists.txt~	2021-11-11 12:06:03.000000000 +0100
++++ indi-1.9.3/CMakeLists.txt	2021-12-03 22:23:39.017116177 +0100
+@@ -597,6 +597,7 @@
+ endif (NOT CYGWIN AND NOT WIN32)
+ target_compile_definitions(indilx200 PRIVATE "-DHAVE_LIBNOVA")
+ set_target_properties(indilx200 PROPERTIES VERSION ${CMAKE_INDI_VERSION_STRING} SOVERSION ${INDI_SOVERSION} OUTPUT_NAME indilx200)
++target_link_libraries(indilx200 indidriver)
+ 
+ install(TARGETS indilx200 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ install(FILES
