@@ -6,7 +6,7 @@ Summary:	Instrument Neutral Distributed Interface
 Summary(pl.UTF-8):	Instrument Neutral Distributed Interface - interfejs do sterowania przyrządami
 Name:		libindi
 Version:	1.9.3
-Release:	1
+Release:	2
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	https://github.com/indilib/indi/archive/v%{version}/%{name}-%{version}.tar.gz
