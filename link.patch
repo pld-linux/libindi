@@ -1,21 +1,32 @@
---- indi-1.9.3/libs/indibase/alignment/CMakeLists.txt~	2021-12-03 22:14:34.000000000 +0100
-+++ indi-1.9.3/libs/indibase/alignment/CMakeLists.txt	2021-12-03 22:21:23.609154205 +0100
-@@ -43,7 +43,7 @@
-     ELSE ()
-         # Force linking all referenced libraries because of libgsl is not linked against cblas library on Linux
-         SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-as-needed")
--        target_link_libraries(AlignmentDriver dl ${GSL_LIBRARIES})
-+        target_link_libraries(AlignmentDriver indidriver dl ${GSL_LIBRARIES})
-     ENDIF ()
- ENDIF ()
+--- indi-1.9.9/libs/alignment/CMakeLists.txt.orig	2023-04-09 14:03:53.041693784 +0200
++++ indi-1.9.9/libs/alignment/CMakeLists.txt	2023-04-09 14:40:35.479762154 +0200
+@@ -46,7 +46,7 @@ ELSE()
+     ENDIF()
+ ENDIF()
  
---- indi-1.9.3/CMakeLists.txt~	2021-11-11 12:06:03.000000000 +0100
-+++ indi-1.9.3/CMakeLists.txt	2021-12-03 22:23:39.017116177 +0100
-@@ -597,6 +597,7 @@
- endif (NOT CYGWIN AND NOT WIN32)
+-target_link_libraries(AlignmentDriver indicore indidevice indiclient)
++target_link_libraries(AlignmentDriver indidriver indicore indidevice indiclient)
+ 
+ if(INDI_BUILD_QT5)
+     target_link_libraries(AlignmentDriver Qt5::Network)
+--- indi-1.9.9/drivers/telescope/CMakeLists.txt.orig	2022-11-29 18:29:12.000000000 +0100
++++ indi-1.9.9/drivers/telescope/CMakeLists.txt	2023-04-09 14:41:33.999445125 +0200
+@@ -17,7 +17,7 @@ endif(NOT CYGWIN AND NOT WIN32)
  target_compile_definitions(indilx200 PRIVATE "-DHAVE_LIBNOVA")
  set_target_properties(indilx200 PROPERTIES VERSION ${CMAKE_INDI_VERSION_STRING} SOVERSION ${INDI_SOVERSION} OUTPUT_NAME indilx200)
-+target_link_libraries(indilx200 indidriver)
+ 
+-target_link_libraries(indilx200 indidevice)
++target_link_libraries(indilx200 indidriver indidevice)
  
  install(TARGETS indilx200 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
  install(FILES
+--- indi-1.9.9/libs/indiclientqt/CMakeLists.txt.orig	2022-11-29 18:29:12.000000000 +0100
++++ indi-1.9.9/libs/indiclientqt/CMakeLists.txt	2023-04-09 18:35:59.516579034 +0200
+@@ -48,6 +48,7 @@ list(APPEND ${PROJECT_NAME}_PRIVATE_HEAD
+ # Build Object Library
+ add_library(${PROJECT_NAME}_OBJECT OBJECT)
+ set_property(TARGET ${PROJECT_NAME}_OBJECT PROPERTY POSITION_INDEPENDENT_CODE 1)
++set_property(TARGET ${PROJECT_NAME}_OBJECT PROPERTY AUTOMOC ON)
+ 
+ target_include_directories(${PROJECT_NAME}_OBJECT
+     PUBLIC .

@@ -1,11 +1,11 @@
---- libindi/libs/indibase/alignment/CMakeLists.txt.orig	2017-06-29 05:55:25.448075443 +0200
-+++ libindi/libs/indibase/alignment/CMakeLists.txt	2017-06-29 15:33:03.307679715 +0200
-@@ -80,7 +80,7 @@
- SET_TARGET_PROPERTIES(AlignmentClient PROPERTIES COMPILE_FLAGS "-fPIC")
- endif(NOT CYGWIN AND NOT WIN32)
+--- indi-1.9.9/libs/alignment/CMakeLists.txt.orig	2022-11-29 18:29:12.000000000 +0100
++++ indi-1.9.9/libs/alignment/CMakeLists.txt	2023-04-09 13:54:17.838143262 +0200
+@@ -99,7 +99,7 @@ endif(NOT CYGWIN AND NOT WIN32)
+ target_link_libraries(AlignmentClient indicore indidevice indiclient)
+ 
  set_target_properties(AlignmentClient PROPERTIES OUTPUT_NAME indiAlignmentClient)
 -install(TARGETS AlignmentClient ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 +install(TARGETS AlignmentClient DESTINATION ${CMAKE_INSTALL_LIBDIR})
  
- ##################################################
- ############ LoaderCLient test program ###########
+ # #################################################
+ # ########### LoaderCLient test program ###########
