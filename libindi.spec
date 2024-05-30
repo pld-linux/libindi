@@ -6,13 +6,13 @@
 Summary:	Instrument Neutral Distributed Interface
 Summary(pl.UTF-8):	Instrument Neutral Distributed Interface - interfejs do sterowania przyrządami
 Name:		libindi
-Version:	1.9.9
+Version:	2.0.7
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/indilib/indi/releases
 Source0:	https://github.com/indilib/indi/archive/v%{version}/indi-%{version}.tar.gz
-# Source0-md5:	8c5a1b485156cd209d3fb71fb8748172
+# Source0-md5:	b4303195c4a4891f0cab75907ae227b3
 Patch0:		no_static_lib.patch
 Patch1:		link.patch
 URL:		https://www.indilib.org/
@@ -21,6 +21,7 @@ URL:		https://www.indilib.org/
 %{?with_websocketpp:BuildRequires:	boost-devel}
 BuildRequires:	cfitsio-devel >= 3.03
 BuildRequires:	cmake >= 3.13
+BuildRequires:	cpp-httplib-devel
 BuildRequires:	curl-devel
 BuildRequires:	fftw3-devel >= 3
 BuildRequires:	gsl-devel >= 1.10
@@ -32,6 +33,7 @@ BuildRequires:	librtlsdr-devel
 BuildRequires:	libstdc++-devel >= 6:4.3
 BuildRequires:	libtheora-devel
 BuildRequires:	libusb-devel >= 1
+BuildRequires:	nlohmann-json-devel
 BuildRequires:	pkgconfig
 %{?with_qt5:BuildRequires:	qt5-build >= 5.0}
 BuildRequires:	rpmbuild(macros) >= 1.603
@@ -136,7 +138,9 @@ Statyczna biblioteka kliencka INDI oparta na Qt5.
 	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
 	%{?with_qt5:-DINDI_BUILD_QT5_CLIENT=ON} \
 	%{?with_websocketpp:-DINDI_BUILD_WEBSOCKET=ON} \
-	-DINDI_MATH_PLUGINS_DIRECTORY:PATH=%{_libdir}/indi/MathPlugins
+	-DINDI_MATH_PLUGINS_DIRECTORY:PATH=%{_libdir}/indi/MathPlugins \
+	-DINDI_SYSTEM_HTTPLIB=ON \
+	-DINDI_SYSTEM_JSONLIB=ON
 
 %{__make} -C build
 
@@ -161,6 +165,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_Excalibur
 %attr(755,root,root) %{_bindir}/indi_aaf2_focus
 %attr(755,root,root) %{_bindir}/indi_activefocuser_focus
+%attr(755,root,root) %{_bindir}/indi_alluna_tcs2
+%attr(755,root,root) %{_bindir}/indi_alto
 %attr(755,root,root) %{_bindir}/indi_arduinost4
 %attr(755,root,root) %{_bindir}/indi_astromech_lpm
 %attr(755,root,root) %{_bindir}/indi_astrometry
@@ -168,6 +174,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_baader_dome
 %attr(755,root,root) %{_bindir}/indi_celestron_gps
 %attr(755,root,root) %{_bindir}/indi_celestron_sct_focus
+%attr(755,root,root) %{_bindir}/indi_cheapodc
 %attr(755,root,root) %{_bindir}/indi_crux_mount
 %attr(755,root,root) %{_bindir}/indi_ddw_dome
 %attr(755,root,root) %{_bindir}/indi_deepskydad_af1_focus
@@ -177,9 +184,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_deepskydad_fr1
 %attr(755,root,root) %{_bindir}/indi_dmfc_focus
 %attr(755,root,root) %{_bindir}/indi_domepro2_dome
+%attr(755,root,root) %{_bindir}/indi_dragon_light
+%attr(755,root,root) %{_bindir}/indi_dragonlair_dome
 %attr(755,root,root) %{_bindir}/indi_dsc_telescope
 %attr(755,root,root) %{_bindir}/indi_efa_focus
 %attr(755,root,root) %{_bindir}/indi_eq500x_telescope
+%attr(755,root,root) %{_bindir}/indi_esatto_focus
 %attr(755,root,root) %{_bindir}/indi_esattoarco_focus
 %attr(755,root,root) %{_bindir}/indi_eval
 %attr(755,root,root) %{_bindir}/indi_falcon_rotator
@@ -187,9 +197,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_flipflat
 %attr(755,root,root) %{_bindir}/indi_gemini_focus
 %attr(755,root,root) %{_bindir}/indi_getprop
+%attr(755,root,root) %{_bindir}/indi_giotto
 %attr(755,root,root) %{_bindir}/indi_gpusb
 %attr(755,root,root) %{_bindir}/indi_hid_test
 %attr(755,root,root) %{_bindir}/indi_hitecastrodc_focus
+%attr(755,root,root) %{_bindir}/indi_ieaf_focus
 %attr(755,root,root) %{_bindir}/indi_ieqlegacy_telescope
 %attr(755,root,root) %{_bindir}/indi_ieq_telescope
 %attr(755,root,root) %{_bindir}/indi_imager_agent
@@ -197,14 +209,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_ioptronHC8406
 %attr(755,root,root) %{_bindir}/indi_ioptronv3_telescope
 %attr(755,root,root) %{_bindir}/indi_joystick
+%attr(755,root,root) %{_bindir}/indi_lacerta_mfoc_fmc_focus
 %attr(755,root,root) %{_bindir}/indi_lacerta_mfoc_focus
 %attr(755,root,root) %{_bindir}/indi_lakeside_focus
 %attr(755,root,root) %{_bindir}/indi_lx200_10micron
 %attr(755,root,root) %{_bindir}/indi_lx200_16
 %attr(755,root,root) %{_bindir}/indi_lx200_OpenAstroTech
+%attr(755,root,root) %{_bindir}/indi_lx200_pegasus_nyx101
 %attr(755,root,root) %{_bindir}/indi_lx200am5
-%attr(755,root,root) %{_bindir}/indi_lx200ap
-%attr(755,root,root) %{_bindir}/indi_lx200ap_gtocp2
 %attr(755,root,root) %{_bindir}/indi_lx200ap_v2
 %attr(755,root,root) %{_bindir}/indi_lx200autostar
 %attr(755,root,root) %{_bindir}/indi_lx200basic
@@ -226,6 +238,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_microtouch_focus
 %attr(755,root,root) %{_bindir}/indi_moonlitedro_focus
 %attr(755,root,root) %{_bindir}/indi_moonlite_focus
+%attr(755,root,root) %{_bindir}/indi_myDewControllerPro
+%attr(755,root,root) %{_bindir}/indi_mydcp4esp32
 %attr(755,root,root) %{_bindir}/indi_myfocuserpro2_focus
 %attr(755,root,root) %{_bindir}/indi_nexdome_beaver
 %attr(755,root,root) %{_bindir}/indi_nfocus
@@ -238,14 +252,18 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_paramount_telescope
 %attr(755,root,root) %{_bindir}/indi_pegasus_flatmaster
 %attr(755,root,root) %{_bindir}/indi_pegasus_focuscube
+%attr(755,root,root) %{_bindir}/indi_pegasus_focuscube3
 %attr(755,root,root) %{_bindir}/indi_pegasus_ppb
 %attr(755,root,root) %{_bindir}/indi_pegasus_ppba
 %attr(755,root,root) %{_bindir}/indi_pegasus_prodigyMF
 %attr(755,root,root) %{_bindir}/indi_pegasus_scopsoag
+%attr(755,root,root) %{_bindir}/indi_pegasus_spb
 %attr(755,root,root) %{_bindir}/indi_pegasus_uch
 %attr(755,root,root) %{_bindir}/indi_pegasus_upb
+%attr(755,root,root) %{_bindir}/indi_pegasusindigo_wheel
 %attr(755,root,root) %{_bindir}/indi_perfectstar_focus
 %attr(755,root,root) %{_bindir}/indi_planewave_deltat
+%attr(755,root,root) %{_bindir}/indi_planewave_telescope
 %attr(755,root,root) %{_bindir}/indi_pmc8_telescope
 %attr(755,root,root) %{_bindir}/indi_pyxis_rotator
 %attr(755,root,root) %{_bindir}/indi_qhycfw1_wheel
@@ -301,19 +319,25 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_vantage_weather
 %attr(755,root,root) %{_bindir}/indi_wanderer_cover
 %attr(755,root,root) %{_bindir}/indi_wanderer_lite_rotator
+%attr(755,root,root) %{_bindir}/indi_wanderer_rotator_lite_v2
+%attr(755,root,root) %{_bindir}/indi_wanderer_rotator_mini
+%attr(755,root,root) %{_bindir}/indi_wandererbox_plus_v3
+%attr(755,root,root) %{_bindir}/indi_wandererbox_pro_v3
+%attr(755,root,root) %{_bindir}/indi_wanderercover_v4_ec
 %attr(755,root,root) %{_bindir}/indi_watchdog
 %attr(755,root,root) %{_bindir}/indi_watcher_weather
 %attr(755,root,root) %{_bindir}/indi_weather_safety_proxy
 %attr(755,root,root) %{_bindir}/indi_xagyl_wheel
 %attr(755,root,root) %{_bindir}/indiserver
+%attr(755,root,root) %{_bindir}/shelyak_usis
 %attr(755,root,root) %{_libdir}/libindiAlignmentDriver.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libindiAlignmentDriver.so.1
+%attr(755,root,root) %ghost %{_libdir}/libindiAlignmentDriver.so.2
 %attr(755,root,root) %{_libdir}/libindiclient.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libindiclient.so.1
+%attr(755,root,root) %ghost %{_libdir}/libindiclient.so.2
 %attr(755,root,root) %{_libdir}/libindidriver.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libindidriver.so.1
+%attr(755,root,root) %ghost %{_libdir}/libindidriver.so.2
 %attr(755,root,root) %{_libdir}/libindilx200.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libindilx200.so.1
+%attr(755,root,root) %ghost %{_libdir}/libindilx200.so.2
 %dir %{_libdir}/indi
 %dir %{_libdir}/indi/MathPlugins
 %attr(755,root,root) %{_libdir}/indi/MathPlugins/libindi_Nearest_MathPlugin.so
@@ -321,6 +345,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/indi
 %{_datadir}/indi/drivers.xml
 %{_datadir}/indi/indi_tcfs_sk.xml
+%{_datadir}/indi/shelyak_boards.json
 /lib/udev/rules.d/80-dbk21-camera.rules
 /lib/udev/rules.d/99-indi_auxiliary.rules
 
@@ -343,7 +368,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with qt5}
 %files qt5
 %attr(755,root,root) %{_libdir}/libindiclientqt.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libindiclientqt.so.1
+%attr(755,root,root) %ghost %{_libdir}/libindiclientqt.so.2
 
 %files qt5-devel
 %defattr(644,root,root,755)

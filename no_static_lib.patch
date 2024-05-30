@@ -1,7 +1,7 @@
---- indi-1.9.9/libs/alignment/CMakeLists.txt.orig	2022-11-29 18:29:12.000000000 +0100
-+++ indi-1.9.9/libs/alignment/CMakeLists.txt	2023-04-09 13:54:17.838143262 +0200
-@@ -99,7 +99,7 @@ endif(NOT CYGWIN AND NOT WIN32)
- target_link_libraries(AlignmentClient indicore indidevice indiclient)
+--- indi-2.0.7/libs/alignment/CMakeLists.txt.orig	2024-05-29 21:54:31.874233156 +0200
++++ indi-2.0.7/libs/alignment/CMakeLists.txt	2024-05-29 22:02:33.304958355 +0200
+@@ -94,7 +94,7 @@ endif(NOT WIN32)
+ target_link_libraries(AlignmentClient indidevice indiclient)
  
  set_target_properties(AlignmentClient PROPERTIES OUTPUT_NAME indiAlignmentClient)
 -install(TARGETS AlignmentClient ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

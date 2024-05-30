@@ -1,22 +1,22 @@
---- indi-1.9.9/libs/alignment/CMakeLists.txt.orig	2023-04-09 14:03:53.041693784 +0200
-+++ indi-1.9.9/libs/alignment/CMakeLists.txt	2023-04-09 14:40:35.479762154 +0200
-@@ -46,7 +46,7 @@ ELSE()
-     ENDIF()
+--- indi-2.0.7/libs/alignment/CMakeLists.txt.orig	2024-05-29 22:05:20.394053156 +0200
++++ indi-2.0.7/libs/alignment/CMakeLists.txt	2024-05-30 07:34:21.692427200 +0200
+@@ -41,7 +41,7 @@ ELSE()
+     )
  ENDIF()
  
--target_link_libraries(AlignmentDriver indicore indidevice indiclient)
-+target_link_libraries(AlignmentDriver indidriver indicore indidevice indiclient)
+-target_link_libraries(AlignmentDriver indidevice indiclient)
++target_link_libraries(AlignmentDriver indidevice indiclient indidriver)
  
  if(INDI_BUILD_QT5)
      target_link_libraries(AlignmentDriver Qt5::Network)
---- indi-1.9.9/drivers/telescope/CMakeLists.txt.orig	2022-11-29 18:29:12.000000000 +0100
-+++ indi-1.9.9/drivers/telescope/CMakeLists.txt	2023-04-09 14:41:33.999445125 +0200
-@@ -17,7 +17,7 @@ endif(NOT CYGWIN AND NOT WIN32)
- target_compile_definitions(indilx200 PRIVATE "-DHAVE_LIBNOVA")
+--- indi-2.0.7/drivers/telescope/CMakeLists.txt.orig	2024-04-01 11:16:02.000000000 +0200
++++ indi-2.0.7/drivers/telescope/CMakeLists.txt	2024-05-30 07:35:56.295248026 +0200
+@@ -17,7 +17,7 @@ endif(NOT WIN32)
+ target_compile_definitions(indilx200 PRIVATE _XOPEN_SOURCE=700 HAVE_LIBNOVA)
  set_target_properties(indilx200 PROPERTIES VERSION ${CMAKE_INDI_VERSION_STRING} SOVERSION ${INDI_SOVERSION} OUTPUT_NAME indilx200)
  
--target_link_libraries(indilx200 indidevice)
-+target_link_libraries(indilx200 indidriver indidevice)
+-target_link_libraries(indilx200 indidevice $<$<PLATFORM_ID:CYGWIN>:indidriver>)
++target_link_libraries(indilx200 indidevice indidriver)
  
  install(TARGETS indilx200 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
  install(FILES
