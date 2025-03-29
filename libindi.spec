@@ -6,13 +6,13 @@
 Summary:	Instrument Neutral Distributed Interface
 Summary(pl.UTF-8):	Instrument Neutral Distributed Interface - interfejs do sterowania przyrządami
 Name:		libindi
-Version:	2.0.7
+Version:	2.1.2.1
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/indilib/indi/releases
 Source0:	https://github.com/indilib/indi/archive/v%{version}/indi-%{version}.tar.gz
-# Source0-md5:	b4303195c4a4891f0cab75907ae227b3
+# Source0-md5:	64d6761e15c5f700e39397f54641bf8a
 Patch0:		no_static_lib.patch
 Patch1:		link.patch
 URL:		https://www.indilib.org/
@@ -33,6 +33,7 @@ BuildRequires:	librtlsdr-devel
 BuildRequires:	libstdc++-devel >= 6:4.3
 BuildRequires:	libtheora-devel
 BuildRequires:	libusb-devel >= 1
+BuildRequires:	libxisf-devel
 BuildRequires:	nlohmann-json-devel
 BuildRequires:	pkgconfig
 %{?with_qt5:BuildRequires:	qt5-build >= 5.0}
@@ -168,7 +169,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_alluna_tcs2
 %attr(755,root,root) %{_bindir}/indi_alto
 %attr(755,root,root) %{_bindir}/indi_arduinost4
+%attr(755,root,root) %{_bindir}/indi_astrolink4
+%attr(755,root,root) %{_bindir}/indi_astrolink4mini2
 %attr(755,root,root) %{_bindir}/indi_astromech_lpm
+%attr(755,root,root) %{_bindir}/indi_astromechfoc
 %attr(755,root,root) %{_bindir}/indi_astrometry
 %attr(755,root,root) %{_bindir}/indi_astrotrac_telescope
 %attr(755,root,root) %{_bindir}/indi_baader_dome
@@ -180,12 +184,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_deepskydad_af1_focus
 %attr(755,root,root) %{_bindir}/indi_deepskydad_af2_focus
 %attr(755,root,root) %{_bindir}/indi_deepskydad_af3_focus
-%attr(755,root,root) %{_bindir}/indi_deepskydad_fp1
+%attr(755,root,root) %{_bindir}/indi_deepskydad_fp
 %attr(755,root,root) %{_bindir}/indi_deepskydad_fr1
 %attr(755,root,root) %{_bindir}/indi_dmfc_focus
 %attr(755,root,root) %{_bindir}/indi_domepro2_dome
 %attr(755,root,root) %{_bindir}/indi_dragon_light
 %attr(755,root,root) %{_bindir}/indi_dragonlair_dome
+%attr(755,root,root) %{_bindir}/indi_dreamfocuser_focus
 %attr(755,root,root) %{_bindir}/indi_dsc_telescope
 %attr(755,root,root) %{_bindir}/indi_efa_focus
 %attr(755,root,root) %{_bindir}/indi_eq500x_telescope
@@ -193,6 +198,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_esattoarco_focus
 %attr(755,root,root) %{_bindir}/indi_eval
 %attr(755,root,root) %{_bindir}/indi_falcon_rotator
+%attr(755,root,root) %{_bindir}/indi_falconv2_rotator
 %attr(755,root,root) %{_bindir}/indi_fcusb_focus
 %attr(755,root,root) %{_bindir}/indi_flipflat
 %attr(755,root,root) %{_bindir}/indi_gemini_focus
@@ -207,7 +213,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_imager_agent
 %attr(755,root,root) %{_bindir}/indi_integra_focus
 %attr(755,root,root) %{_bindir}/indi_ioptronHC8406
+%attr(755,root,root) %{_bindir}/indi_ioptron_wheel
 %attr(755,root,root) %{_bindir}/indi_ioptronv3_telescope
+%attr(755,root,root) %{_bindir}/indi_ipx800v4
 %attr(755,root,root) %{_bindir}/indi_joystick
 %attr(755,root,root) %{_bindir}/indi_lacerta_mfoc_fmc_focus
 %attr(755,root,root) %{_bindir}/indi_lacerta_mfoc_focus
@@ -301,6 +309,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_skywatcherAltAzMount
 %attr(755,root,root) %{_bindir}/indi_smartfocus_focus
 %attr(755,root,root) %{_bindir}/indi_snapcap
+%attr(755,root,root) %{_bindir}/indi_spectracyber
 %attr(755,root,root) %{_bindir}/indi_sqm_weather
 %attr(755,root,root) %{_bindir}/indi_star2000
 %attr(755,root,root) %{_bindir}/indi_steeldrive2_focus
@@ -311,7 +320,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_tcfs_focus
 %attr(755,root,root) %{_bindir}/indi_teenastro_focus
 %attr(755,root,root) %{_bindir}/indi_temma_telescope
+%attr(755,root,root) %{_bindir}/indi_terrans_powerboxgo_v2
+%attr(755,root,root) %{_bindir}/indi_terrans_powerboxpro_v2
 %attr(755,root,root) %{_bindir}/indi_trutech_wheel
+%attr(755,root,root) %{_bindir}/indi_universalror_dome
 %attr(755,root,root) %{_bindir}/indi_uranus_weather
 %attr(755,root,root) %{_bindir}/indi_usbdewpoint
 %attr(755,root,root) %{_bindir}/indi_usbfocusv3_focus
@@ -326,6 +338,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/indi_wanderercover_v4_ec
 %attr(755,root,root) %{_bindir}/indi_watchdog
 %attr(755,root,root) %{_bindir}/indi_watcher_weather
+%attr(755,root,root) %{_bindir}/indi_wavesharemodbus_relay
 %attr(755,root,root) %{_bindir}/indi_weather_safety_proxy
 %attr(755,root,root) %{_bindir}/indi_xagyl_wheel
 %attr(755,root,root) %{_bindir}/indiserver
