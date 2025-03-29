@@ -129,8 +129,8 @@ Statyczna biblioteka kliencka INDI oparta na Qt5.
 
 %prep
 %setup -q -n indi-%{version}
-%patch0 -p1
-%patch1 -p1
+%patch -P0 -p1
+%patch -P1 -p1
 
 %build
 # note: CMakeLists expect relative CMAKE_INSTALL_LIBDIR
